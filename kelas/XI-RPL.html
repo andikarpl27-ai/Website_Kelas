@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>XI RPL - Kelas XI RPL 24/25</title>
+  <style>
+    :root {
+      --bg: #f3f7fb;
+      --card: #ffffff;
+      --panel: #0055aa; /* chosen navy */
+      --accent: #E8C547; /* chosen gold */
+      --muted: #6b7a90;
+      --shadow: 0 10px 30px rgba(0,85,170,0.08);
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,system-ui,Roboto,"Poppins",sans-serif;background:var(--bg);color:#082033}
+
+    header{display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(90deg,var(--panel),#0a5aa6);color:var(--accent);position:sticky;top:0;z-index:50}
+    header img.logo{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.08)}
+    header .title{font-weight:700;font-size:18px}
+    header .subtitle{font-size:13px;opacity:.95}
+
+    .top-actions{margin-left:auto;display:flex;gap:8px}
+    .btn{background:var(--panel);color:var(--accent);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+    .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.12)}
+    .btn:hover{transform:translateY(-2px)}
+
+    nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 12px;background:linear-gradient(180deg,#ffffff, #f1f6fb);border-bottom:2px solid rgba(8,51,88,0.06)}
+    nav a{color:var(--panel);text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600}
+    nav a:hover{background:var(--panel);color:var(--accent)}
+
+    main{padding:20px;max-width:1200px;margin:0 auto;}
+
+    /* ========== STRUKTUR KELAS (VERTICAL TREE) ========== */
+    .org{display:flex;justify-content:center;margin:18px 0 28px}
+    .tree{width:100%;max-width:920px;background:linear-gradient(180deg,#fff,#fbfdff);padding:18px;border-radius:12px;box-shadow:var(--shadow);border:1px solid rgba(8,51,88,0.06); position:relative;}
+
+    /* vertical layout with connectors */
+    .tree .level{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .node{background:var(--card);color:var(--panel);padding:12px 14px;border-radius:10px;display:flex;align-items:center;gap:12px;min-width:240px;box-shadow:0 8px 22px rgba(8,51,88,0.05);border:1px solid rgba(8,51,88,0.04);z-index:2}
+    .node .thumb{width:66px;height:66px;border-radius:10px;object-fit:cover;border:3px solid var(--accent)}
+    .node h4{margin:0;font-size:15px}
+    .node p{margin:0;color:var(--muted);font-size:13px}
+
+    /* vertical connector line for whole column */
+    .tree::before{content:"";position:absolute;left:50%;transform:translateX(-50%);top:28px;bottom:28px;width:2px;background:linear-gradient(180deg,var(--accent),transparent);z-index:1;border-radius:2px}
+
+    .row-roles{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;z-index:3;position:relative}
+    .role{display:flex;flex-direction:column;align-items:center;min-width:120px; position:relative}
+    .role .node{flex-direction:column;align-items:center;min-width:120px;padding:10px}
+    .role .label{font-size:12px;color:var(--muted);margin-top:6px}
+
+    /* simple small connector line above roles (keeps it stable) */
+    .role::before{content:"";position:absolute;left:50%;transform:translateX(-50%);top:-18px;width:36px;height:2px;background:linear-gradient(90deg,var(--panel),var(--accent));border-radius:2px;display:block}
+
+    /* ========== DATA SISWA ========== */
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px;gap:12px}
+    .section-title h2{margin:0;color:var(--panel)}
+    .grid-siswa{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .card-siswa{background:var(--card);padding:10px;border-radius:10px;text-align:center;box-shadow:0 6px 16px rgba(8,51,88,0.04);border:1px solid rgba(8,51,88,0.04)}
+    .card-siswa img{width:100%;height:160px;object-fit:cover;border-radius:8px;border:3px solid var(--accent)}
+    .card-siswa h4{font-size:13px;color:var(--panel);margin:8px 0 6px}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* ========== JADWAL MAPEL (Custom Style) ========== */
+    .jadwal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .card-jadwal{padding:12px;border-radius:10px;box-shadow:var(--shadow);border:1px solid rgba(8,51,88,0.04); min-height: 420px;} /* Min-height agar kotak mirip */
+
+    /* Backgrounds sesuai warna di Image 1/Jadwal Asli */
+    .card-jadwal.senin{background: #e8f2ff;} /* Biru Muda */
+    .card-jadwal.selasa{background: #fff0f2;} /* Merah Muda */
+    .card-jadwal.rabu{background: #eaffef;} /* Hijau Muda */
+    .card-jadwal.kamis{background: #fffaf0;} /* Kuning Muda */
+    .card-jadwal.jumat{background: #f8f0ff;} /* Ungu Muda */
+
+    .card-jadwal h3{margin:4px 0 12px;color:#082033;font-size: 18px; font-weight: 700; text-align: center;}
+    .subject{display:flex;flex-direction: column; align-items:flex-start; gap:4px; padding:6px 10px; border-radius:8px; background:var(--card); margin-bottom:8px; border: 1px solid rgba(0,0,0,0.06);}
+    .subject .time{font-weight: 600; font-size: 13px; color: var(--panel);}
+    .subject .mapel{display: block; font-size: 14px; font-weight: 500; color: #082033; margin-bottom: 4px;}
+    .subject .teacher{display: flex; justify-content: space-between; align-items: center; width: 100%;}
+    .subject .teacher-name{font-size: 13px; color: var(--muted);}
+
+    /* ========== PIKET (Custom Style) ========= */
+    .piket-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
+    .piket-day{padding:12px;border-radius:10px;box-shadow:var(--shadow);border:1px solid rgba(8,51,88,0.04); min-height: 200px;} /* Min-height */
+
+    .piket-day.senin-piket{background: #e9f0ff;}
+    .piket-day.selasa-piket{background: #fff1f3;}
+    .piket-day.rabu-piket{background: #e9fff0;}
+    .piket-day.kamis-piket{background: #fffaf0;}
+    .piket-day.jumat-piket{background: #f6f0ff;}
+
+    .piket-day strong{font-size: 18px; color: var(--panel); display: block; margin-bottom: 8px; text-align: center;}
+    .piket-day .student-name{display: block; padding: 4px 8px; margin-bottom: 4px; border-radius: 6px; background: var(--card); font-size: 14px; font-weight: 500;}
+
+    /* ========== MODALs ========= */
+    .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(4,25,52,0.45);align-items:center;justify-content:center;z-index:1200}
+    .modal{background:#fff;border-radius:12px;padding:18px;max-width:420px;width:92%;box-shadow:0 18px 50px rgba(4,25,52,0.18);color:#0b2033}
+    .modal .m-head{display:flex;gap:12px;align-items:center}
+    .modal img{width:88px;height:88px;border-radius:8px;object-fit:cover;border:3px solid var(--accent)}
+    .modal h3{margin:0;color:var(--panel)}
+    .modal p{margin:6px 0;color:var(--muted);font-size:14px}
+    .modal .m-close{margin-top:12px;padding:8px 12px;border-radius:8px;background:crimson;color:#fff;border:none;cursor:pointer}
+
+/* responsive tweaks */
+@media (max-width:980px){
+  .tree::before{left:50%}
+  .row-roles .role::before{display:none}
+}
+
+@media (max-width:520px){
+  header{padding:12px}
+  header .title{font-size:16px}
+  .node{min-width:160px}
+  .card-siswa img{height:120px}
+}
+  </style>
+</head>
+<body>
+<header>
+  <!-- adjust the logo path if needed -->
+  <img src="/All Images/img-index/SMKN T.png" class="logo" alt="Logo Sekolah">
+  <div>
+    <div class="title">Kelas XI RPL 24/25 — SMKN Tambakboyo</div>
+    <div class="subtitle">Kreatif • Cerdas • Solid</div>
+  </div>
+
+  <div class="top-actions">
+    <button class="btn ghost" onclick="history.back()">← Kembali</button>
+    <a class="btn" href="/jurusan.html" title="Ke Halaman Jurusan">Ke Halaman Jurusan</a>
+  </div>
+</header>
+
+<nav>
+  <a href="#struktur">Struktur</a>
+  <a href="#data">Data Siswa</a>
+  <a href="#jadwal">Jadwal</a>
+  <a href="#piket">Piket</a>
+</nav>
+
+<main>
+    <section id="struktur" class="org">
+    <div class="tree" role="region" aria-label="Struktur Kelas">
+      <div class="level" style="padding-top:12px">
+                <div class="node" style="z-index:3;margin:0 auto;">
+          <img class="thumb" src="/All Images/Guru-XI RPL/Mama Shifa.jpeg" alt="Wali Kelas">
+          <div>
+            <h4>Wali Kelas</h4>
+            <p class="small">Yuli Ponco H., S.Si., Gr.</p>
+          </div>
+        </div>
+
+                <div class="row-roles" style="margin-top:14px">
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/idar.jpeg" alt="Ketua"><div><h4>Ketua</h4><p class="label">Ketua Kelas</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/andika.jpeg" alt="Wakil"><div><h4>Wakil</h4><p class="label">Wakil Ketua</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/lila.jpeg" alt="Sekretaris 1"><div><h4>Sekretaris 1</h4><p class="label">Sekretaris</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/aulia.jpeg" alt="Sekretaris 2"><div><h4>Sekretaris 2</h4><p class="label">Sekretaris</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/risma.jpeg" alt="Bendahara 1"><div><h4>Bendahara 1</h4><p class="label">Bendahara</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/kusnul.jpeg" alt="Bendahara 2"><div><h4>Bendahara 2</h4><p class="label">Bendahara</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/tiara.jpeg" alt="Seksi Kekeluargaan"><div><h4>Seksi Kekeluargaan</h4><p class="label">Seksi</p></div></div></div>
+          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/ika.jpeg" alt="Seksi Kebersihan"><div><h4>Seksi Kebersihan</h4><p class="label">Seksi</p></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section id="data" aria-labelledby="dataTitle">
+    <div class="section-title">
+      <h2 id="dataTitle">Data Siswa (35 siswa)</h2>
+      <div>
+        <button class="btn" id="exportBtn" onclick="exportList()">Export</button>
+      </div>
+    </div>
+
+    <div class="grid-siswa" id="gridSiswa">
+      <!--
+        Wadah 1 siswa seperti yang diminta.
+        Script di bawah akan merender hanya siswa pertama (index 0).
+        Kalau nanti ingin merender semua, set renderOnlyFirst = false di script.
+      -->
+    </div>
+
+    <!-- template tetap ada untuk kemudahan nanti -->
+    <template id="tmplSiswa">
+      <div class="card-siswa">
+        <img src="../images/siswa/foto-siswa.jpg" alt="Foto siswa">
+        <h4 class="nama">Nama siswa</h4>
+        <div class="small nisn">NISN: 000000</div>
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:center">
+          <button class="btn" data-role="open-student">Lihat Data</button>
+        </div>
+      </div>
+    </template>
+  </section>
+
+  <div class="modal-backdrop" id="studentModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mName">
+    <div class="m-head">
+      <img id="mFoto" src="../images/siswa/foto-siswa.jpg" alt="Foto">
+      <div>
+        <h3 id="mName">Nama</h3>
+        <p id="mNisn">NISN: -</p>
+      </div>
+    </div>
+    <p><b>TTL:</b> <span id="mTtl">-</span></p>
+    <p><b>Alamat:</b> <span id="mAlamat">-</span></p>
+    <button class="m-close" id="closeStudent">Tutup</button>
+  </div>
+</div>
+
+  <div class="modal-backdrop" id="teacherModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="gName">
+    <div class="m-head">
+      <img id="gFoto" src="../images/guru/guru-default.jpg" alt="Foto Guru">
+      <div>
+        <h3 id="gName">Nama Guru</h3>
+        <p id="gMapel">Mapel: -</p>
+      </div>
+    </div>
+    <p><b>Kontak / Info:</b> <span id="gInfo">-</span></p>
+    <button class="m-close" id="closeTeacher">Tutup</button>
+  </div>
+</div>
+
+  <section id="jadwal">
+    <h2>Jadwal Pelajaran (Senin - Jumat)</h2>
+    <div class="jadwal-grid">
+
+            <div class="card-jadwal senin">
+      <h3>Senin</h3>
+      <div class="subject">
+        <time class="time">07.40 - 09.00</time>
+        <span class="mapel">B. Inggris</span>
+        <div class="teacher"><span class="teacher-name">— Bu Fada</span><button class="btn" data-teacher='{"name":"Bu Fada","mapel":"B. Inggris","info":"Ruang 102","foto":"/"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">09.00 - 10.40</time>
+        <span class="mapel">Penjas</span>
+        <div class="teacher"><span class="teacher-name">— Pak Nurdin</span><button class="btn" data-teacher='{"name":"Pak Nurdin","mapel":"Penjas","info":"Lapangan Utama","foto":"../images/guru/guru-olahraga.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">10.40 - 12.00</time>
+        <span class="mapel">Sejarah</span>
+        <div class="teacher"><span class="teacher-name">— Bu Yuli</span><button class="btn" data-teacher='{"name":"Bu Yuli","mapel":"Sejarah","info":"Ruang 205","foto":"../images/guru/guru-sejarah.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">12.30 - 13.10</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Bu Ika</span><button class="btn" data-teacher='{"name":"Bu Ika","mapel":"Konsentrasi Keahlian","info":"Lab 1 RPL","foto":"../images/guru/guru-rpl.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">13.10 - 13.50</time>
+        <span class="mapel">BK</span>
+        <div class="teacher"><span class="teacher-name">— Bu Yulia</span><button class="btn" data-teacher='{"name":"Bu Yulia","mapel":"Bimbingan Konseling (BK)","info":"Ruang BK","foto":"../images/guru/guru-default.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">13.50 - 15.10</time>
+        <span class="mapel">PKN</span>
+        <div class="teacher"><span class="teacher-name">— Bu Etty</span><button class="btn" data-teacher='{"name":"Bu Etty","mapel":"PKN","info":"Ruang 103","foto":"../images/guru/guru-pkn.jpg"}'>Lihat Guru</button></div>
+      </div>
+    </div>
+
+            <div class="card-jadwal selasa">
+      <h3>Selasa</h3>
+      <div class="subject">
+        <time class="time">07.00 - 08.20</time>
+        <span class="mapel">PKK</span>
+        <div class="teacher"><span class="teacher-name">— Bu Yuni</span><button class="btn" data-teacher='{"name":"Bu Yuni","mapel":"Produk Kreatif & Kewirausahaan (PKK)","info":"Ruang 201","foto":"../images/guru/guru-keterampilan.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">08.20 - 10.40</time>
+        <span class="mapel">PAI</span>
+        <div class="teacher"><span class="teacher-name">— Pak Dlin</span><button class="btn" data-teacher='{"name":"Pak Dlin","mapel":"Pendidikan Agama Islam (PAI)","info":"Ruang 204","foto":"../images/guru/guru-agama.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">10.40 - 13.10</time>
+        <span class="mapel">Matematika</span>
+        <div class="teacher"><span class="teacher-name">— Bu Tata</span><button class="btn" data-teacher='{"name":"Bu Tata","mapel":"Matematika","info":"Ruang 101","foto":"../images/guru/guru-mtk.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">13.10 - 15.00</time>
+        <span class="mapel">Bahasa Indonesia</span>
+        <div class="teacher"><span class="teacher-name">— Bu Mira</span><button class="btn" data-teacher='{"name":"Bu Mira","mapel":"Bahasa Indonesia","info":"Ruang 203","foto":"../images/guru/guru-bindo.jpg"}'>Lihat Guru</button></div>
+      </div>
+    </div>
+
+            <div class="card-jadwal rabu">
+      <h3>Rabu</h3>
+      <div class="subject">
+        <time class="time">07.00 - 08.20</time>
+        <span class="mapel">B. Jawa</span>
+        <div class="teacher"><span class="teacher-name">— Bu Tika</span><button class="btn" data-teacher='{"name":"Bu Tika","mapel":"Bahasa Jawa","info":"Ruang Bahasa","foto":"../images/guru/guru-default.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">08.20 - 09.40</time>
+        <span class="mapel">B. Inggris</span>
+        <div class="teacher"><span class="teacher-name">— Bu Fada</span><button class="btn" data-teacher='{"name":"Bu Fada","mapel":"B. Inggris","info":"Ruang 102","foto":"../images/guru/guru-inggris.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">10.00 - 13.10</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Pak Arno</span><button class="btn" data-teacher='{"name":"Pak Arno","mapel":"Konsentrasi Keahlian","info":"Lab 2 RPL","foto":"../images/guru/guru-prog.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">13.10 - 15.10</time>
+        <span class="mapel">PKK</span>
+        <div class="teacher"><span class="teacher-name">— Bu Yuni</span><button class="btn" data-teacher='{"name":"Bu Yuni","mapel":"PKK","info":"Ruang 201","foto":"../images/guru/guru-keterampilan.jpg"}'>Lihat Guru</button></div>
+      </div>
+    </div>
+
+            <div class="card-jadwal kamis">
+      <h3>Kamis</h3>
+      <div class="subject">
+        <time class="time">07.00 - 10.40</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Bu Ika</span><button class="btn" data-teacher='{"name":"Bu Ika","mapel":"Konsentrasi Keahlian","info":"Lab 1 RPL","foto":"../images/guru/guru-rpl.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">10.00 - 15.10</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Pak Nuril</span><button class="btn" data-teacher='{"name":"Pak Nuril","mapel":"Konsentrasi Keahlian","info":"Lab 3 RPL","foto":"../images/guru/guru-db.jpg"}'>Lihat Guru</button></div>
+      </div>
+    </div>
+
+            <div class="card-jadwal jumat">
+      <h3>Jumat</h3>
+      <div class="subject">
+        <time class="time">07.00 - 09.00</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Bu Ika</span><button class="btn" data-teacher='{"name":"Bu Ika","mapel":"Konsentrasi Keahlian","info":"Lab 1 RPL","foto":"../images/guru/guru-rpl.jpg"}'>Lihat Guru</button></div>
+      </div>
+      <div class="subject">
+        <time class="time">09.00 - 11.20</time>
+        <span class="mapel">Konsentrasi Keahlian</span>
+        <div class="teacher"><span class="teacher-name">— Pak Arno</span><button class="btn" data-teacher='{"name":"Pak Arno","mapel":"Konsentrasi Keahlian","info":"Lab 2 RPL","foto":"../images/guru/guru-prog.jpg"}'>Lihat Guru</button></div>
+      </div>
+    </div>
+
+    </div>
+  </section>
+
+  <section id="piket">
+    <h2>Jadwal Piket Kelas</h2>
+    <div class="piket-list">
+            <div class="piket-day senin-piket">
+      <strong>Senin (6)</strong>
+      <span class="student-name">1. Aisyah</span>
+      <span class="student-name">2. Aulia</span>
+      <span class="student-name">3. Safa Putri</span>
+      <span class="student-name">4. Dini</span>
+      <span class="student-name">5. Rafael</span>
+      <span class="student-name">6. Aan</span>
+    </div>
+    <div class="piket-day selasa-piket">
+      <strong>Selasa (7)</strong>
+      <span class="student-name">1. Kirana</span>
+      <span class="student-name">2. Kusnul</span>
+      <span class="student-name">3. Lila</span>
+      <span class="student-name">4. Ika</span>
+      <span class="student-name">5. Risma</span>
+      <span class="student-name">6. Andika</span>
+      <span class="student-name">7. Mahfud</span>
+    </div>
+    <div class="piket-day rabu-piket">
+      <strong>Rabu (7)</strong>
+      <span class="student-name">1. Novita</span>
+      <span class="student-name">2. Arin</span>
+      <span class="student-name">3. Silvi</span>
+      <span class="student-name">4. Diva</span>
+      <span class="student-name">5. Aurel</span>
+      <span class="student-name">6. Idar</span>
+      <span class="student-name">7. Khasan</span>
+    </div>
+    <div class="piket-day kamis-piket">
+      <strong>Kamis (7)</strong>
+      <span class="student-name">1. Renata</span>
+      <span class="student-name">2. Charissa</span>
+      <span class="student-name">3. Dinda</span>
+      <span class="student-name">4. Eka</span>
+      <span class="student-name">5. Tiara</span>
+      <span class="student-name">6. Supri</span>
+      <span class="student-name">7. Aga</span>
+    </div>
+    <div class="piket-day jumat-piket">
+      <strong>Jumat (6)</strong>
+      <span class="student-name">1. Nuria</span>
+      <span class="student-name">2. Marsya</span>
+      <span class="student-name">3. Datul Astuti</span>
+      <span class="student-name">4. Nisya</span>
+      <span class="student-name">5. Anita</span>
+      <span class="student-name">6. Lukman</span>
+    </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ====== DATA SISWA LENGKAP (35 Siswa) ====== */
+// Data ini diisi dengan nama-nama fiktif, disarankan untuk mengganti dengan data asli Anda.
+const studentData = [
+  { name: "Aisyah Hari Afika Liawati", nisn: "1000000001", ttl: "01-01-2008", alamat: "Tambakboyo", foto: "." },
+  { name: "Andika Wahyu Utama", nisn: "1000000002", ttl: "01-02-2008", alamat: "Bancaran", foto: "../images/siswa/2.jpg" },
+  { name: "Anita", nisn: "1000000003", ttl: "01-03-2008", alamat: "Kedungdoro", foto: "../images/siswa/3.jpg" },
+  { name: "Aurel Effilian Nadjuwa Putri", nisn: "1000000004", ttl: "01-04-2008", alamat: "Tambakboyo", foto: "../images/siswa/4.jpg" },
+  { name: "Siswa 05", nisn: "1000000005", ttl: "01-05-2008", alamat: "Bancaran", foto: "../images/siswa/5.jpg" },
+  { name: "Siswa 06", nisn: "1000000006", ttl: "01-06-2008", alamat: "Kedungdoro", foto: "../images/siswa/6.jpg" },
+  { name: "Siswa 07", nisn: "1000000007", ttl: "01-07-2008", alamat: "Tambakboyo", foto: "../images/siswa/7.jpg" },
+  { name: "Siswa 08", nisn: "1000000008", ttl: "01-08-2008", alamat: "Bancaran", foto: "../images/siswa/8.jpg" },
+  { name: "Siswa 09", nisn: "1000000009", ttl: "01-09-2008", alamat: "Kedungdoro", foto: "../images/siswa/9.jpg" },
+  { name: "Siswa 10", nisn: "1000000010", ttl: "01-10-2008", alamat: "Tambakboyo", foto: "../images/siswa/10.jpg" },
+  { name: "Siswa 11", nisn: "1000000011", ttl: "01-11-2008", alamat: "Bancaran", foto: "../images/siswa/11.jpg" },
+  { name: "Siswa 12", nisn: "1000000012", ttl: "01-12-2008", alamat: "Kedungdoro", foto: "../images/siswa/12.jpg" },
+  { name: "Siswa 13", nisn: "1000000013", ttl: "02-01-2008", alamat: "Tambakboyo", foto: "../images/siswa/13.jpg" },
+  { name: "Siswa 14", nisn: "1000000014", ttl: "02-02-2008", alamat: "Bancaran", foto: "../images/siswa/14.jpg" },
+  { name: "Siswa 15", nisn: "1000000015", ttl: "02-03-2008", alamat: "Kedungdoro", foto: "../images/siswa/15.jpg" },
+  { name: "Siswa 16", nisn: "1000000016", ttl: "02-04-2008", alamat: "Tambakboyo", foto: "../images/siswa/16.jpg" },
+  { name: "Siswa 17", nisn: "1000000017", ttl: "02-05-2008", alamat: "Bancaran", foto: "../images/siswa/17.jpg" },
+  { name: "Siswa 18", nisn: "1000000018", ttl: "02-06-2008", alamat: "Kedungdoro", foto: "../images/siswa/18.jpg" },
+  { name: "Siswa 19", nisn: "1000000019", ttl: "02-07-2008", alamat: "Tambakboyo", foto: "../images/siswa/19.jpg" },
+  { name: "Siswa 20", nisn: "1000000020", ttl: "02-08-2008", alamat: "Bancaran", foto: "../images/siswa/20.jpg" },
+  { name: "Siswa 21", nisn: "1000000021", ttl: "02-09-2008", alamat: "Kedungdoro", foto: "../images/siswa/21.jpg" },
+  { name: "Siswa 22", nisn: "1000000022", ttl: "02-10-2008", alamat: "Tambakboyo", foto: "../images/siswa/22.jpg" },
+  { name: "Siswa 23", nisn: "1000000023", ttl: "02-11-2008", alamat: "Bancaran", foto: "../images/siswa/23.jpg" },
+  { name: "Siswa 24", nisn: "1000000024", ttl: "02-12-2008", alamat: "Kedungdoro", foto: "../images/siswa/24.jpg" },
+  { name: "Siswa 25", nisn: "1000000025", ttl: "03-01-2008", alamat: "Tambakboyo", foto: "../images/siswa/25.jpg" },
+  { name: "Siswa 26", nisn: "1000000026", ttl: "03-02-2008", alamat: "Bancaran", foto: "../images/siswa/26.jpg" },
+  { name: "Siswa 27", nisn: "1000000027", ttl: "03-03-2008", alamat: "Kedungdoro", foto: "../images/siswa/27.jpg" },
+  { name: "Siswa 28", nisn: "1000000028", ttl: "03-04-2008", alamat: "Tambakboyo", foto: "../images/siswa/28.jpg" },
+  { name: "Siswa 29", nisn: "1000000029", ttl: "03-05-2008", alamat: "Bancaran", foto: "../images/siswa/29.jpg" },
+  { name: "Siswa 30", nisn: "1000000030", ttl: "03-06-2008", alamat: "Kedungdoro", foto: "../images/siswa/30.jpg" },
+  { name: "Siswa 31", nisn: "1000000031", ttl: "03-07-2008", alamat: "Tambakboyo", foto: "../images/siswa/31.jpg" },
+  { name: "Siswa 32", nisn: "1000000032", ttl: "03-08-2008", alamat: "Bancaran", foto: "../images/siswa/32.jpg" },
+  { name: "Siswa 33", nisn: "1000000033", ttl: "03-09-2008", alamat: "Kedungdoro", foto: "../images/siswa/33.jpg" },
+  { name: "Siswa 34", nisn: "1000000034", ttl: "03-10-2008", alamat: "Tambakboyo", foto: "../images/siswa/34.jpg" },
+  { name: "Siswa 35", nisn: "1000000035", ttl: "03-11-2008", alamat: "Bancaran", foto: "../images/siswa/35.jpg" },
+];
+
+/* ====== GENERATE SISWA DENGAN TEMPLATE (render hanya 1 siswa secara default) ====== */
+(function(){
+  const grid = document.getElementById('gridSiswa');
+  const t = document.getElementById('tmplSiswa');
+  const renderOnlyFirst = true; // <-- Ubah ke false jika mau menampilkan semua siswa
+
+  if(studentData.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'card-siswa';
+    empty.innerHTML = '<p class="small">Belum ada data siswa</p>';
+    grid.appendChild(empty);
+    return;
+  }
+
+  if(renderOnlyFirst){
+    const data = studentData[0];
+    const clone = t.content.cloneNode(true);
+    const img = clone.querySelector('img');
+    const nameEl = clone.querySelector('.nama');
+    const nisnEl = clone.querySelector('.nisn');
+    const btn = clone.querySelector('button');
+
+    img.src = data.foto || '../images/siswa/foto-siswa.jpg';
+    img.onerror = ()=>{ img.src = '../images/siswa/foto-siswa.jpg' };
+
+    nameEl.textContent = data.name;
+    nisnEl.textContent = `NISN: ${data.nisn}`;
+
+    btn.dataset.name = data.name;
+    btn.dataset.nisn = data.nisn;
+    btn.dataset.ttl = data.ttl;
+    btn.dataset.alamat = data.alamat;
+    btn.dataset.foto = img.src;
+
+    btn.addEventListener('click', openStudentFromBtn);
+    grid.appendChild(clone);
+  } else {
+    // jika mau menampilkan semua, ubah renderOnlyFirst ke false
+    studentData.forEach(data => {
+      const clone = t.content.cloneNode(true);
+      const img = clone.querySelector('img');
+      const nameEl = clone.querySelector('.nama');
+      const nisnEl = clone.querySelector('.nisn');
+      const btn = clone.querySelector('button');
+
+      img.src = data.foto || '../images/siswa/foto-siswa.jpg';
+      img.onerror = ()=>{ img.src = '../images/siswa/foto-siswa.jpg' };
+
+      nameEl.textContent = data.name;
+      nisnEl.textContent = `NISN: ${data.nisn}`;
+
+      btn.dataset.name = data.name;
+      btn.dataset.nisn = data.nisn;
+      btn.dataset.ttl = data.ttl;
+      btn.dataset.alamat = data.alamat;
+      btn.dataset.foto = img.src;
+
+      btn.addEventListener('click', openStudentFromBtn);
+      grid.appendChild(clone);
+    });
+  }
+})();
+
+/* ====== MODAL SISWA HANDLER ====== */
+const studentModal = document.getElementById('studentModal');
+const closeStudent = document.getElementById('closeStudent');
+function openStudentFromBtn(e){
+  const btn = e.currentTarget;
+  openStudentModal({
+    name: btn.dataset.name,
+    nisn: btn.dataset.nisn,
+    ttl: btn.dataset.ttl,
+    alamat: btn.dataset.alamat,
+    foto: btn.dataset.foto
+  });
+}
+function openStudentModal(d){
+  document.getElementById('mFoto').src = d.foto || '../images/siswa/foto-siswa.jpg';
+  document.getElementById('mName').innerText = d.name || '-';
+  document.getElementById('mNisn').innerText = 'NISN: ' + (d.nisn || '-');
+  document.getElementById('mTtl').innerText = d.ttl || '-';
+  document.getElementById('mAlamat').innerText = d.alamat || '-';
+  studentModal.style.display = 'flex';
+  studentModal.setAttribute('aria-hidden','false');
+}
+function closeStudentModal(){ studentModal.style.display='none'; studentModal.setAttribute('aria-hidden','true') }
+closeStudent.addEventListener('click', closeStudentModal);
+studentModal.addEventListener('click', (ev)=>{ if(ev.target===studentModal) closeStudentModal(); });
+
+/* ====== MODAL GURU HANDLER (JADWAL) ====== */
+const teacherModal = document.getElementById('teacherModal');
+const closeTeacher = document.getElementById('closeTeacher');
+function openTeacherModal(data){
+  const d = (typeof data==='string')? JSON.parse(data) : data;
+  document.getElementById('gFoto').src = d.foto || '../images/guru/guru-default.jpg';
+  document.getElementById('gName').innerText = d.name || '-';
+  document.getElementById('gMapel').innerText = 'Mapel: ' + (d.mapel || '-');
+  document.getElementById('gInfo').innerText = d.info || '-';
+  teacherModal.style.display = 'flex';
+  teacherModal.setAttribute('aria-hidden','false');
+}
+closeTeacher.addEventListener('click', ()=>{ teacherModal.style.display='none'; teacherModal.setAttribute('aria-hidden','true') });
+teacherModal.addEventListener('click', (ev)=>{ if(ev.target===teacherModal) { teacherModal.style.display='none'; teacherModal.setAttribute('aria-hidden','true') }});
+document.addEventListener('click', (ev)=>{
+  const b = ev.target.closest('button[data-teacher]');
+  if(!b) return;
+  const payload = b.getAttribute('data-teacher');
+  try{ openTeacherModal(JSON.parse(payload)); }catch(err){ openTeacherModal(payload); }
+});
+
+/* Accessibility: close teacher/student on ESC both */
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape'){
+    if(studentModal.style.display==='flex') closeStudentModal();
+    if(teacherModal.style.display==='flex'){ teacherModal.style.display='none'; teacherModal.setAttribute('aria-hidden','true') }
+  }
+});
+
+/* Simple export (CSV of names + NISN) */
+function exportList(){
+  const rows = [['Nama','NISN']];
+  studentData.forEach(data => {
+    rows.push([data.name, data.nisn]);
+  });
+
+  const csv = rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'data_siswa_xirpl.csv'; a.click(); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
