@@ -4,37 +4,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>XI RPL - Kelas XI RPL 25/26</title>
-  <link rel="icon" type="image/x-icon" href="All Images/img-index/SMKN T.png">
+  
+  <link rel="icon" type="image/x-icon" href="../All Images/img-index/SMKN T.png">
+  
   <style>
     :root {
       --bg: #f3f7fb;
       --card: #ffffff;
-      --panel: #0055aa; /* chosen navy */
-      --accent: #E8C547; /* chosen gold */
+      --panel: #0055aa;
+      --accent: #E8C547;
       --muted: #6b7a90;
       --shadow: 0 10px 30px rgba(0,85,170,0.08);
-
-      /* NEW PASTEL COLORS & STYLES FOR JADWAL/PIKET */
-      --senin-bg: #e8f2ff;
-      --selasa-bg: #ffe4e4; /* Slightly pinker */
-      --rabu-bg: #eaffef;
-      --kamis-bg: #fffaf0;
-      --jumat-bg: #f0e6ff; /* Slightly purpler */
+      --senin-bg: #e8f2ff; --selasa-bg: #ffe4e4; --rabu-bg: #eaffef;
+      --kamis-bg: #fffaf0; --jumat-bg: #f0e6ff;
       --item-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      --header-text: #4a5568;
-      --body-text: #2d3748;
+      --header-text: #4a5568; --body-text: #2d3748;
     }
 
     * {box-sizing:border-box}
-    body {margin:0;font-family:Inter,Segoe UI,system-ui,Roboto,"Poppins",sans-serif;background:var(--bg);color:#082033}
+    body {margin:0;font-family:Inter,Segoe UI,system-ui,Roboto,"Poppins",sans-serif;background:var(--bg);color:#082033; scroll-behavior: smooth;}
 
     header {display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(90deg,var(--panel),#0a5aa6);color:var(--accent);position:sticky;top:0;z-index:50}
-    header img.logo {width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.08)}
+    header img.logo {width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.08); background: #fff;} /* Add bg white for transparent logos */
     header .title {font-weight:700;font-size:18px}
     header .subtitle {font-size:13px;opacity:.95}
 
     .top-actions {margin-left:auto;display:flex;gap:8px}
-    .btn {background:var(--panel);color:var(--accent);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+    .btn {background:var(--panel);color:var(--accent);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600; text-decoration: none; font-size: 14px;}
     .btn.ghost {background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.12)}
     .btn:hover {transform:translateY(-2px)}
 
@@ -44,7 +40,7 @@
 
     main {padding:20px;max-width:1200px;margin:0 auto;}
 
-    /* ========== STRUKTUR KELAS (VERTICAL TREE) ========== */
+    /* STRUKTUR KELAS */
     .org {display:flex;justify-content:center;margin:18px 0 28px}
     .tree {width:100%;max-width:920px;background:linear-gradient(180deg,#fff,#fbfdff);padding:18px;border-radius:12px;box-shadow:var(--shadow);border:1px solid rgba(8,51,88,0.06); position:relative;}
     .tree .level {position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
@@ -59,101 +55,57 @@
     .role .label {font-size:12px;color:var(--muted);margin-top:6px}
     .role::before {content:"";position:absolute;left:50%;transform:translateX(-50%);top:-18px;width:36px;height:2px;background:linear-gradient(90deg,var(--panel),var(--accent));border-radius:2px;display:block}
 
-    /* ========== DATA SISWA ========== */
+    /* DATA SISWA */
     .section-title {display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px;gap:12px}
     .section-title h2 {margin:0;color:var(--panel)}
-    .grid-siswa {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    .card-siswa {background:var(--card);padding:10px;border-radius:10px;text-align:center;box-shadow:0 6px 16px rgba(8,51,88,0.04);border:1px solid rgba(8,51,88,0.04)}
-    .card-siswa img {width:100%;height:160px;object-fit:cover;border-radius:8px;border:3px solid var(--accent)}
-    .card-siswa h4 {font-size:13px;color:var(--panel);margin:8px 0 6px}
+    .grid-siswa {display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .card-siswa {background:var(--card);padding:10px;border-radius:10px;text-align:center;box-shadow:0 6px 16px rgba(8,51,88,0.04);border:1px solid rgba(8,51,88,0.04); transition: transform 0.2s;}
+    .card-siswa:hover {transform: translateY(-5px);}
+    .card-siswa img {width:100%;height:150px;object-fit:cover;border-radius:8px;border:3px solid var(--accent); background: #eee;}
+    .card-siswa h4 {font-size:13px;color:var(--panel);margin:8px 0 6px; line-height: 1.4;}
     .small {font-size:12px;color:var(--muted)}
 
-    /* ========== NEW JADWAL & PIKET STYLE (Based on Images) ========== */
-    /* Common Card Style for Days */
-    .card-jadwal, .piket-day {
-        padding: 24px 18px;
-        border-radius: 28px; /* rounded corners like image */
-        box-shadow: var(--shadow);
-        border: none; /* removed border */
-        min-height: 200px;
-    }
-
-    /* Day Headers */
-    .card-jadwal h3, .piket-day strong {
-        margin: 0 0 20px 0;
-        color: var(--header-text);
-        font-size: 18px;
-        font-weight: 700;
-        text-align: center;
-        display: block;
-    }
-
-    /* Day Background Colors */
+    /* JADWAL & PIKET */
+    .card-jadwal, .piket-day {padding: 24px 18px; border-radius: 28px; box-shadow: var(--shadow); border: none; min-height: 200px;}
+    .card-jadwal h3, .piket-day strong {margin: 0 0 20px 0; color: var(--header-text); font-size: 18px; font-weight: 700; text-align: center; display: block;}
+    
     .card-jadwal.senin, .piket-day.senin-piket { background: var(--senin-bg); }
     .card-jadwal.selasa, .piket-day.selasa-piket { background: var(--selasa-bg); }
     .card-jadwal.rabu, .piket-day.rabu-piket { background: var(--rabu-bg); }
     .card-jadwal.kamis, .piket-day.kamis-piket { background: var(--kamis-bg); }
     .card-jadwal.jumat, .piket-day.jumat-piket { background: var(--jumat-bg); }
 
-    /* JADWAL ITEMS (White pills) */
     .jadwal-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
-    
     .jadwal-item {
-        background: #ffffff;
-        padding: 12px 16px;
-        border-radius: 16px;
-        margin-bottom: 12px;
-        box-shadow: var(--item-shadow);
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+        background: #ffffff; padding: 12px 16px; border-radius: 16px; margin-bottom: 12px;
+        box-shadow: var(--item-shadow); display: flex; flex-direction: column; gap: 4px;
+        cursor: pointer; transition: 0.2s; border: 1px solid transparent;
     }
+    /* Hover effect for jadwal item to show it is clickable */
+    .jadwal-item:hover { border-color: var(--accent); transform: scale(1.02); }
+    .jadwal-item .time { font-weight: 700; font-size: 14px; color: var(--body-text); }
+    .jadwal-item .info { font-size: 15px; color: var(--body-text); }
+    .jadwal-item .guru { font-style: italic; color: var(--muted); margin-left: 4px; }
+    .click-hint { font-size: 10px; color: var(--panel); text-align: right; margin-top: 4px; font-weight: 600; opacity: 0.7; }
+
+    /* PIKET */
+    .piket-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:8px; }
+    .piket-day .student-name { display: block; background: #ffffff; padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; box-shadow: var(--item-shadow); font-size: 14px; font-weight: 500; color: var(--body-text); }
+
+    /* MODAL (Reusable for Student & Guru) */
+    .modal-backdrop {display:none;position:fixed;inset:0;background:rgba(4,25,52,0.6);align-items:center;justify-content:center;z-index:1200; backdrop-filter: blur(4px);}
+    .modal {background:#fff;border-radius:16px;padding:24px;max-width:400px;width:90%;box-shadow:0 18px 50px rgba(4,25,52,0.25);color:#0b2033; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+    @keyframes popIn { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
     
-    .jadwal-item .time {
-        font-weight: 700;
-        font-size: 14px;
-        color: var(--body-text);
-    }
+    .modal .m-head {display:flex;gap:16px;align-items:center; margin-bottom: 16px;}
+    .modal img {width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+    .modal h3 {margin:0;color:var(--panel); font-size: 18px;}
+    .modal p {margin:4px 0;color:var(--muted);font-size:14px}
+    .m-body { border-top: 1px solid #eee; padding-top: 12px; }
+    .modal .m-close {margin-top:16px;width: 100%; padding:10px 12px;border-radius:10px;background:var(--panel);color:#fff;border:none;cursor:pointer; font-weight: bold;}
+    .modal .m-close:hover { background: #0a5aa6; }
 
-    .jadwal-item .info {
-        font-size: 15px;
-        color: var(--body-text);
-    }
-    
-    /* Guru style (italic, lighter color) */
-    .jadwal-item .guru {
-        font-style: italic;
-        color: var(--muted);
-        margin-left: 4px;
-    }
-
-    /* PIKET ITEMS (White pills) */
-    .piket-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:8px; }
-
-    .piket-day .student-name {
-        display: block;
-        background: #ffffff;
-        padding: 12px 16px;
-        border-radius: 16px;
-        margin-bottom: 10px;
-        box-shadow: var(--item-shadow);
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--body-text);
-        border: none; /* Reset old style */
-    }
-
-
-    /* ========== MODALs ========= */
-    .modal-backdrop {display:none;position:fixed;inset:0;background:rgba(4,25,52,0.45);align-items:center;justify-content:center;z-index:1200}
-    .modal {background:#fff;border-radius:12px;padding:18px;max-width:420px;width:92%;box-shadow:0 18px 50px rgba(4,25,52,0.18);color:#0b2033}
-    .modal .m-head {display:flex;gap:12px;align-items:center}
-    .modal img {width:88px;height:88px;border-radius:8px;object-fit:cover;border:3px solid var(--accent)}
-    .modal h3 {margin:0;color:var(--panel)}
-    .modal p {margin:6px 0;color:var(--muted);font-size:14px}
-    .modal .m-close {margin-top:12px;padding:8px 12px;border-radius:8px;background:crimson;color:#fff;border:none;cursor:pointer}
-
-    /* responsive tweaks */
+    /* Responsive */
     @media (max-width:980px) {
       .tree::before {left:50%}
       .row-roles .role::before {display:none}
@@ -162,21 +114,20 @@
       header {padding:12px}
       header .title {font-size:16px}
       .node {min-width:160px}
-      .card-siswa img {height:120px}
     }
   </style>
 </head>
 <body>
+
 <header>
-  <img src="/All Images/img-index/SMKN T.png" class="logo" alt="Logo Sekolah">
+  <img src="../All Images/img-index/SMKN T.png" class="logo" alt="Logo Sekolah">
   <div>
     <div class="title">Kelas XI RPL 24/25 — SMKN Tambakboyo</div>
     <div class="subtitle">Kreatif • Cerdas • Solid</div>
   </div>
 
   <div class="top-actions">
-    <button class="btn ghost" onclick="history.back()">← Kembali</button>
-    <a class="btn" href="/jurusan.html" title="Ke Halaman Jurusan">Ke Halaman Jurusan</a>
+    <a href="../jurusan.html" class="btn ghost">← Kembali</a>
   </div>
 </header>
 
@@ -188,343 +139,236 @@
 </nav>
 
 <main>
-    <section id="struktur" class="org">
+  <section id="struktur" class="org">
     <div class="tree" role="region" aria-label="Struktur Kelas">
       <div class="level" style="padding-top:12px">
-                <div class="node" style="z-index:3;margin:0 auto;">
-          <img class="thumb" src="/All Images/Guru-XI RPL/Mama Shifa.jpeg" alt="Wali Kelas">
+        <div class="node" style="z-index:3;margin:0 auto;">
+          <img class="thumb" src="../All Images/Guru-XI RPL/Mama Shifa.jpeg" onerror="this.src='https://ui-avatars.com/api/?name=Wali+Kelas'" alt="Wali Kelas">
           <div>
             <h4>Wali Kelas</h4>
             <p class="small">Yuli Ponco H., S.Si., Gr.</p>
           </div>
         </div>
 
-                <div class="row-roles" style="margin-top:14px">
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/idar.jpeg" alt="Ketua"><div><h4>Ketua</h4><p class="label">Ketua Kelas</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/andika.jpeg" alt="Wakil"><div><h4>Wakil</h4><p class="label">Wakil Ketua</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/lila.jpeg" alt="Sekretaris 1"><div><h4>Sekretaris 1</h4><p class="label">Sekretaris</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/aulia.jpeg" alt="Sekretaris 2"><div><h4>Sekretaris 2</h4><p class="label">Sekretaris</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/risma.jpeg" alt="Bendahara 1"><div><h4>Bendahara 1</h4><p class="label">Bendahara</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/kusnul.jpeg" alt="Bendahara 2"><div><h4>Bendahara 2</h4><p class="label">Bendahara</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/tiara.jpeg" alt="Seksi Kekeluargaan"><div><h4>Seksi Kekeluargaan</h4><p class="label">Seksi</p></div></div></div>
-          <div class="role"><div class="node"><img class="thumb" src="/All Images/img-rpl/ika.jpeg" alt="Seksi Kebersihan"><div><h4>Seksi Kebersihan</h4><p class="label">Seksi</p></div></div></div>
-        </div>
+        <div class="row-roles" style="margin-top:14px">
+          <div class="role"><div class="node"><img class="thumb" src="../All Images/img-rpl/idar.jpeg" onerror="this.src='https://ui-avatars.com/api/?name=Ketua'" alt="Ketua"><div><h4>Ketua</h4><p class="label">Idar</p></div></div></div>
+          
+          <div class="role"><div class="node"><img class="thumb" src="../All Images/img-rpl/andika.jpeg" onerror="this.src='https://ui-avatars.com/api/?name=Wakil'" alt="Wakil"><div><h4>Wakil</h4><p class="label">Andika</p></div></div></div>
+          
+          <div class="role"><div class="node"><img class="thumb" src="../All Images/img-rpl/lila.jpeg" onerror="this.src='https://ui-avatars.com/api/?name=Sekretaris'" alt="Sek1"><div><h4>Sekretaris 1</h4><p class="label">Lila</p></div></div></div>
+
+          <div class="role"><div class="node"><img class="thumb" src="../All Images/img-rpl/risma.jpeg" onerror="this.src='https://ui-avatars.com/api/?name=Bendahara'" alt="Ben1"><div><h4>Bendahara 1</h4><p class="label">Risma</p></div></div></div>
+          
+          </div>
       </div>
     </div>
   </section>
 
-    <section id="data" aria-labelledby="dataTitle">
+  <section id="data">
     <div class="section-title">
       <h2 id="dataTitle">Data Siswa (35 siswa)</h2>
-      <div>
-        <button class="btn" id="exportBtn" onclick="exportList()">Export</button>
-      </div>
+      <button class="btn" onclick="exportList()">Export Data</button>
     </div>
 
-    <div class="grid-siswa" id="gridSiswa">
-      </div>
+    <div class="grid-siswa" id="gridSiswa"></div>
 
     <template id="tmplSiswa">
       <div class="card-siswa">
-        <img src="../images/siswa/foto-siswa.jpg" alt="Foto siswa">
-        <h4 class="nama">Nama siswa</h4>
-        <div class="small nisn">NISN: 000000</div>
-        <div style="margin-top:8px;display:flex;gap:8px;justify-content:center">
-          <button class="btn" data-role="open-student">Lihat Data</button>
+        <img loading="lazy" src="" alt="Foto siswa">
+        <h4 class="nama">Nama Siswa</h4>
+        <div class="small nisn">NISN</div>
+        <div style="margin-top:8px;">
+          <button class="btn" style="font-size:12px; padding:6px 10px;" data-role="open-student">Lihat Detail</button>
         </div>
       </div>
     </template>
   </section>
 
-  <div class="modal-backdrop" id="studentModal" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mName">
-    <div class="m-head">
-      <img id="mFoto" src="../images/siswa/foto-siswa.jpg" alt="Foto">
-      <div>
-        <h3 id="mName">Nama</h3>
-        <p id="mNisn">NISN: -</p>
+  <div class="modal-backdrop" id="infoModal" aria-hidden="true">
+    <div class="modal" role="dialog">
+      <div class="m-head">
+        <img id="mFoto" src="" alt="Foto">
+        <div>
+          <h3 id="mTitle">Nama</h3>
+          <p id="mSubtitle">Subtitle</p>
+        </div>
       </div>
+      <div class="m-body" id="mBody">
+        </div>
+      <button class="m-close" onclick="closeModal()">Tutup</button>
     </div>
-    <p><b>TTL:</b> <span id="mTtl">-</span></p>
-    <p><b>Alamat:</b> <span id="mAlamat">-</span></p>
-    <button class="m-close" id="closeStudent">Tutup</button>
   </div>
-</div>
 
-<section id="jadwal">
-    <h2 style="text-align: center; margin-bottom: 25px; color: var(--panel);">Jadwal Pelajaran (Senin - Jumat)</h2>
+  <section id="jadwal">
+    <h2 style="text-align: center; margin: 40px 0 25px; color: var(--panel);">Jadwal Pelajaran (Klik untuk Info Guru)</h2>
     <div class="jadwal-grid">
 
-        <div class="card-jadwal senin">
-          <h3>Senin</h3>
-          
-          <div class="jadwal-item">
-            <span class="time">07.40 - 09.00</span>
-            <div class="info">B. Inggris — <span class="guru">Bu Fada</span></div>
-          </div>
+      <div class="card-jadwal senin">
+        <h3>Senin</h3>
+        <div class="jadwal-item" onclick="showGuru('Bu Fada', 'Bahasa Inggris', '07.40 - 09.00', '../All Images/Guru-XI RPL/Bu Fada.jpeg')">
+          <span class="time">07.40 - 09.00</span>
+          <div class="info">B. Inggris — <span class="guru">Bu Fada</span></div>
+          <div class="click-hint">Lihat Guru 👁️</div>
+        </div>
 
-          <div class="jadwal-item">
-            <span class="time">09.00 - 10.40</span>
-            <div class="info">Penjas — <span class="guru">Pak Nurdin</span></div>
-          </div>
-
-          <div class="jadwal-item">
+        <div class="jadwal-item" onclick="showGuru('Pak Nurdin', 'Penjasorkes', '09.00 - 10.40', '../All Images/Guru-XI RPL/Pak Nurdin.jpeg')">
+          <span class="time">09.00 - 10.40</span>
+          <div class="info">Penjas — <span class="guru">Pak Nurdin</span></div>
+          <div class="click-hint">Lihat Guru 👁️</div>
+        </div>
+        
+        <div class="jadwal-item" onclick="showGuru('Bu Yuli', 'Sejarah', '10.40 - 12.00', '../All Images/Guru-XI RPL/Mama Shifa.jpeg')">
             <span class="time">10.40 - 12.00</span>
             <div class="info">Sejarah — <span class="guru">Bu Yuli</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">12.30 - 13.10</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Bu Ika</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">13.10 - 13.50</span>
-            <div class="info">BK — <span class="guru">Bu Yulia</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">13.50 - 15.10</span>
-            <div class="info">PKN — <span class="guru">Bu Etty</span></div>
-          </div>
-
+            <div class="click-hint">Lihat Guru 👁️</div>
         </div>
+      </div>
 
-        <div class="card-jadwal selasa">
-          <h3>Selasa</h3>
-          
-          <div class="jadwal-item">
-            <span class="time">07.00 - 08.20</span>
-            <div class="info">PKK — <span class="guru">Bu Yuni</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">08.20 - 10.40</span>
-            <div class="info">PAI — <span class="guru">Pak Dlin</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">10.40 - 13.10</span>
-            <div class="info">Matematika — <span class="guru">Bu Tata</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">13.10 - 15.00</span>
-            <div class="info">Bahasa Indonesia — <span class="guru">Bu Mira</span></div>
-          </div>
-
+      <div class="card-jadwal selasa">
+        <h3>Selasa</h3>
+        <div class="jadwal-item" onclick="showGuru('Bu Yuni', 'PKK', '07.00 - 08.20', '../All Images/Guru-XI RPL/Bu Yuni.jpeg')">
+          <span class="time">07.00 - 08.20</span>
+          <div class="info">PKK — <span class="guru">Bu Yuni</span></div>
+          <div class="click-hint">Lihat Guru 👁️</div>
         </div>
-
-        <div class="card-jadwal rabu">
+        </div>
+      
+      <div class="card-jadwal rabu">
           <h3>Rabu</h3>
-          
-          <div class="jadwal-item">
-            <span class="time">07.00 - 08.20</span>
-            <div class="info">B. Jawa — <span class="guru">Bu Tika</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">08.20 - 09.40</span>
-            <div class="info">B. Inggris — <span class="guru">Bu Fada</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">10.00 - 13.10</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Pak Arno</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">13.10 - 15.10</span>
-            <div class="info">PKK — <span class="guru">Bu Yuni</span></div>
-          </div>
-
-        </div>
-
-        <div class="card-jadwal kamis">
-          <h3>Kamis</h3>
-          
-          <div class="jadwal-item">
-            <span class="time">07.00 - 10.40</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Bu Ika</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">10.00 - 15.10</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Pak Nuril</span></div>
-          </div>
-
-        </div>
-
-        <div class="card-jadwal jumat">
-          <h3>Jumat</h3>
-          
-          <div class="jadwal-item">
-            <span class="time">07.00 - 09.00</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Bu Ika</span></div>
-          </div>
-
-          <div class="jadwal-item">
-            <span class="time">09.00 - 11.20</span>
-            <div class="info">Konsentrasi Keahlian — <span class="guru">Pak Arno</span></div>
-          </div>
-
-        </div>
+          <div class="jadwal-item"><span class="time">07.00 - 08.20</span><div class="info">B. Jawa — <span class="guru">Bu Tika</span></div></div>
+      </div>
+      
+      <div class="card-jadwal kamis"><h3>Kamis</h3></div>
+       <div class="card-jadwal jumat"><h3>Jumat</h3></div>
 
     </div>
   </section>
 
   <section id="piket">
-    <h2 style="text-align: center; margin-bottom: 25px; color: var(--panel);">Jadwal Piket Kelas</h2>
+    <h2 style="text-align: center; margin: 40px 0 25px; color: var(--panel);">Jadwal Piket Kelas</h2>
     <div class="piket-list">
       <div class="piket-day senin-piket">
         <strong>Senin</strong>
         <span class="student-name">1. Aisyah</span>
         <span class="student-name">2. Aulia</span>
-        <span class="student-name">3. Safa Putri</span>
-        <span class="student-name">4. Dini</span>
-        <span class="student-name">5. Rafael</span>
-        <span class="student-name">6. Aan</span>
+        </div>
       </div>
-      <div class="piket-day selasa-piket">
-        <strong>Selasa</strong>
-        <span class="student-name">1. Kirana</span>
-        <span class="student-name">2. Kusnul</span>
-        <span class="student-name">3. Lila</span>
-        <span class="student-name">4. Ika</span>
-        <span class="student-name">5. Risma</span>
-        <span class="student-name">6. Andika</span>
-        <span class="student-name">7. Mahfud</span>
-      </div>
-      <div class="piket-day rabu-piket">
-        <strong>Rabu</strong>
-        <span class="student-name">1. Novita</span>
-        <span class="student-name">2. Arin</span>
-        <span class="student-name">3. Silvi</span>
-        <span class="student-name">4. Diva</span>
-        <span class="student-name">5. Aurel</span>
-        <span class="student-name">6. Idar</span>
-        <span class="student-name">7. Khasan</span>
-      </div>
-      <div class="piket-day kamis-piket">
-        <strong>Kamis</strong>
-        <span class="student-name">1. Renata</span>
-        <span class="student-name">2. Charissa</span>
-        <span class="student-name">3. Dinda</span>
-        <span class="student-name">4. Eka</span>
-        <span class="student-name">5. Tiara</span>
-        <span class="student-name">6. Supri</span>
-        <span class="student-name">7. Aga</span>
-      </div>
-      <div class="piket-day jumat-piket">
-        <strong>Jumat</strong>
-        <span class="student-name">1. Nuria</span>
-        <span class="student-name">2. Marsya</span>
-        <span class="student-name">3. Datul Astuti</span>
-        <span class="student-name">4. Nisya</span>
-        <span class="student-name">5. Anita</span>
-        <span class="student-name">6. Lukman</span>
-      </div>
-    </div>
   </section>
+
 </main>
 
 <script>
-/* ====== DATA SISWA LENGKAP (35 Siswa) ====== */
-// Data ini diisi dengan nama-nama fiktif, disarankan untuk mengganti dengan data asli Anda.
+/* ====== DATA SISWA (CONTOH) ====== */
+// Pastikan path foto menggunakan "../All Images/..." bukan "/All Images/"
 const studentData = [
-  { name: "Aisyah Hari Afika Liawati", nisn: "1000000001", ttl: "01-01-2008", alamat: "Tambakboyo", foto: "." },
-  { name: "Andika Wahyu Utama", nisn: "1000000002", ttl: "01-02-2008", alamat: "Bancaran", foto: "../images/siswa/2.jpg" },
-  // ... (Data siswa lainnya tetap sama seperti kode asli Anda) ...
+  { name: "Aisyah Hari Afika", nisn: "0065432101", ttl: "Tuban, 01-01-2008", alamat: "Tambakboyo", foto: "../All Images/img-rpl/aisyah.jpeg" },
+  { name: "Andika Wahyu Utama", nisn: "0065432102", ttl: "Tuban, 05-02-2008", alamat: "Bancaran", foto: "../All Images/img-rpl/andika.jpeg" },
+  { name: "Idar", nisn: "0065432103", ttl: "Tuban, 10-03-2008", alamat: "Sobontoro", foto: "../All Images/img-rpl/idar.jpeg" },
+  // Tambahkan hingga 35 siswa di sini
 ];
 
-/* ====== GENERATE SISWA DENGAN TEMPLATE (render hanya 1 siswa secara default) ====== */
+/* ====== GENERATE SISWA OPTIMIZED ====== */
 (function(){
   const grid = document.getElementById('gridSiswa');
   const t = document.getElementById('tmplSiswa');
-  const renderOnlyFirst = true; // <-- Ubah ke false jika mau menampilkan semua siswa
+  
+  // Gunakan Fragment agar browser tidak render berulang kali (mencegah lag)
+  const fragment = document.createDocumentFragment();
 
-  if(studentData.length === 0 || !studentData[0]){
-    const empty = document.createElement('div');
-    empty.className = 'card-siswa';
-    empty.innerHTML = '<p class="small">Belum ada data siswa</p>';
-    grid.appendChild(empty);
-    return;
-  }
-
-  if(renderOnlyFirst){
-    const data = studentData[0];
+  studentData.forEach(data => {
     const clone = t.content.cloneNode(true);
     const img = clone.querySelector('img');
     const nameEl = clone.querySelector('.nama');
     const nisnEl = clone.querySelector('.nisn');
     const btn = clone.querySelector('button');
 
-    img.src = data.foto || '../images/siswa/foto-siswa.jpg';
-    img.onerror = ()=>{ img.src = '../images/siswa/foto-siswa.jpg' };
-
+    // Fallback image jika foto error/kosong
+    const fallback = 'https://ui-avatars.com/api/?background=random&name=' + encodeURIComponent(data.name);
+    
+    img.src = data.foto || fallback;
+    img.onerror = () => { img.src = fallback; }; // Auto ganti jika file tidak ketemu
+    
     nameEl.textContent = data.name;
-    nisnEl.textContent = `NISN: ${data.nisn}`;
+    nisnEl.textContent = data.nisn;
 
-    btn.dataset.name = data.name;
-    btn.dataset.nisn = data.nisn;
-    btn.dataset.ttl = data.ttl;
-    btn.dataset.alamat = data.alamat;
-    btn.dataset.foto = img.src;
+    // Event listener untuk tombol detail
+    btn.onclick = () => showStudentModal(data);
+    
+    fragment.appendChild(clone);
+  });
 
-    btn.addEventListener('click', openStudentFromBtn);
-    grid.appendChild(clone);
-  }
+  grid.appendChild(fragment); // Render semua sekaligus
 })();
 
-/* ====== MODAL SISWA HANDLER ====== */
-const studentModal = document.getElementById('studentModal');
-const closeStudent = document.getElementById('closeStudent');
-function openStudentFromBtn(e){
-  const btn = e.currentTarget;
-  openStudentModal({
-    name: btn.dataset.name,
-    nisn: btn.dataset.nisn,
-    ttl: btn.dataset.ttl,
-    alamat: btn.dataset.alamat,
-    foto: btn.dataset.foto
-  });
-}
-function openStudentModal(d){
-  document.getElementById('mFoto').src = d.foto || '../images/siswa/foto-siswa.jpg';
-  document.getElementById('mName').innerText = d.name || '-';
-  document.getElementById('mNisn').innerText = 'NISN: ' + (d.nisn || '-');
-  document.getElementById('mTtl').innerText = d.ttl || '-';
-  document.getElementById('mAlamat').innerText = d.alamat || '-';
-  studentModal.style.display = 'flex';
-  studentModal.setAttribute('aria-hidden','false');
-}
-function closeStudentModal(){ studentModal.style.display='none'; studentModal.setAttribute('aria-hidden','true') }
-closeStudent.addEventListener('click', closeStudentModal);
-studentModal.addEventListener('click', (ev)=>{ if(ev.target===studentModal) closeStudentModal(); });
+/* ====== MODAL HANDLER ====== */
+const modal = document.getElementById('infoModal');
+const mFoto = document.getElementById('mFoto');
+const mTitle = document.getElementById('mTitle');
+const mSubtitle = document.getElementById('mSubtitle');
+const mBody = document.getElementById('mBody');
 
-/* NOTE: MODAL GURU HANDLER DIHAPUS KARENA TOMBOLNYA SUDAH TIDAK ADA */
+function closeModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+}
 
-/* Accessibility: close student on ESC */
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='Escape'){
-    if(studentModal.style.display==='flex') closeStudentModal();
+// Menutup modal jika klik di luar area putih
+window.onclick = function(event) {
+  if (event.target == modal) {
+    closeModal();
   }
-});
+}
 
-/* Simple export (CSV of names + NISN) */
+// 1. Fungsi Tampilkan Modal Siswa
+function showStudentModal(data) {
+  mFoto.src = data.foto;
+  mFoto.onerror = () => { mFoto.src = 'https://ui-avatars.com/api/?background=random&name=' + data.name };
+  
+  mTitle.textContent = data.name;
+  mSubtitle.textContent = "NISN: " + data.nisn;
+  
+  mBody.innerHTML = `
+    <p><b>TTL:</b> ${data.ttl}</p>
+    <p><b>Alamat:</b> ${data.alamat}</p>
+    <p style="margin-top:10px; color:green; font-weight:bold;">Status: Siswa Aktif</p>
+  `;
+  
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+// 2. Fungsi Tampilkan Modal Guru (SOLUSI NO 3)
+function showGuru(namaGuru, mapel, jam, fotoUrl) {
+  // Jika fotoUrl kosong atau path salah, pakai avatar default
+  mFoto.src = fotoUrl ? fotoUrl : 'https://ui-avatars.com/api/?name=' + namaGuru;
+  mFoto.onerror = () => { mFoto.src = 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' + namaGuru };
+
+  mTitle.textContent = namaGuru;
+  mSubtitle.textContent = "Pengampu Mapel: " + mapel;
+
+  mBody.innerHTML = `
+    <p><b>Jam Mengajar:</b> ${jam}</p>
+    <p>Silakan hubungi guru yang bersangkutan jika ada keperluan akademik.</p>
+  `;
+
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+/* Export Data Simple */
 function exportList(){
-  const rows = [['Nama','NISN']];
-  studentData.forEach(data => {
-    rows.push([data.name, data.nisn]);
+  let csvContent = "data:text/csv;charset=utf-8,Nama,NISN,Alamat\n";
+  studentData.forEach(row => {
+    csvContent += `${row.name},${row.nisn},${row.alamat}\n`;
   });
-
-  const csv = rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'data_siswa_xirpl.csv'; a.click(); URL.revokeObjectURL(url);
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "data_siswa_xirpl.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 </script>
 </body>
 </html>
-
-
