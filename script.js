@@ -146,4 +146,123 @@ uploadInput.addEventListener("change", (e) => {
     reader.readAsDataURL(file);
   }
 });
+
+// =========================================
+// 1. DATABASE FOTO GALERI
+// =========================================
+// Ganti URL gambar di bawah ini dengan lokasi file foto asli Anda.
+// Format: "folder/nama-foto.jpg"
+const galleries = {
+  // Data dari galeri.html sebelumnya:
+  'rpl': [
+    { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Momen foto menggunakan baju praktik bersama Bu Yuli Rohmawati' },
+    { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Foto bersama Drama Roro Jonggrang' },
+  ],
+  'dpb': [],
+  'titl': [], 
+  'tpm1': [],
+  'tpm2': [],
+  'tkj1': [],
+  'tkj2': [],
+  'tkr1': [],
+  'tkr2': [],
+  'tkr3': [],
+  'tpk1': [],
+  'tpk2': []
+};
+
+// =========================================
+// 2. DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
+// =========================================
+const menuView = document.getElementById('menu-view');
+const galleryView = document.getElementById('gallery-view');
+const photoContainer = document.getElementById('photo-container');
+const classTitle = document.getElementById('class-title');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCap = document.getElementById('lightbox-caption');
+
+
+// =========================================
+// 3. LOGIKA GALERI
+// =========================================
+
+/**
+ * Membuka tampilan galeri spesifik berdasarkan ID kelas.
+ * @param {string} classId - ID kelas (e.g., 'rpl', 'tpm1').
+ */
+function openGallery(classId) {
+  // 1. Sembunyikan menu, tampilkan galeri
+  menuView.style.display = 'none';
+  galleryView.style.display = 'block';
+  window.scrollTo(0, 0); 
+
+  // 2. Set Judul
+  // Mengubah TPK1 menjadi TPK 1 (penyesuaian visual)
+  const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
+  classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
+
+  // 3. Bersihkan foto lama
+  photoContainer.innerHTML = '';
+
+  // 4. Ambil data foto
+  const photos = galleries[classId];
+
+  if (photos && photos.length > 0) {
+    // Jika ada foto, buat elemen HTML nya
+    photos.forEach(photo => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `
+        <img src="${photo.src}" alt="${photo.desc}" loading="lazy" 
+             onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
+        <div class="overlay">${photo.desc}</div>
+      `;
+      // Tambahkan event klik untuk lightbox
+      item.onclick = () => openLightbox(photo.src, photo.desc);
+      photoContainer.appendChild(item);
+    });
+  } else {
+    // Jika tidak ada foto
+    photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto yang diunggah untuk kelas ini.</div>';
+  }
+}
+
+/**
+ * Fungsi Kembali ke Menu Utama Galeri.
+ */
+function closeGallery() {
+  galleryView.style.display = 'none';
+  menuView.style.display = 'block';
+}
+
+// =========================================
+// 4. LOGIKA LIGHTBOX (FOTO BESAR)
+// =========================================
+
+/**
+ * Membuka modal foto besar (lightbox).
+ * @param {string} src - Sumber (URL) gambar.
+ * @param {string} caption - Keterangan gambar.
+ */
+function openLightbox(src, caption) {
+  lightboxImg.src = src;
+  lightboxCap.innerText = caption;
+  lightbox.style.display = 'flex';
+}
+
+/**
+ * Menutup modal foto besar.
+ */
+function closeLightbox() {
+  lightbox.style.display = 'none';
+}
+
+// =========================================
+// 5. EKSPOR FUNGSI (Membuat fungsi dapat dipanggil dari HTML)
+// =========================================
+// Agar fungsi openGallery dan closeGallery bisa dipanggil dari HTML:
+// window.openGallery = openGallery;
+// window.closeGallery = closeGallery;
+// window.closeLightbox = closeLightbox;
 // ==================== AKHIR GALERI INTERAKTIF ====================
