@@ -258,11 +258,7 @@ function closeLightbox() {
   lightbox.style.display = 'none';
 }
 
-// =========================================
-// 5. EKSPOR FUNGSI (Membuat fungsi dapat dipanggil dari HTML)
-// =========================================
-// Agar fungsi openGallery dan closeGallery bisa dipanggil dari HTML:
-// window.openGallery = openGallery;
-// window.closeGallery = closeGallery;
-// window.closeLightbox = closeLightbox;
+window.openGallery = openGallery;
+window.closeGallery = closeGallery;
+window.closeLightbox = closeLightbox;
 // ==================== AKHIR GALERI INTERAKTIF ====================
