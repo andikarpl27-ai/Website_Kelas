@@ -5,75 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Galeri Kelas - SMKN Tambakboyo</title>
   <link rel="icon" type="image/x-icon" href="All Images/img-index/SMKN T.png">
-  <style>
-    /* --- CSS GLOBAL (Mengikuti style jurusan.html) --- */
-    :root {
-      --bg: #f3f7fb;
-      --card-bg: #ffffff;
-      --primary: #0055aa;
-      --accent: #E8C547;
-      --text: #082033;
-    }
-    body { margin:0; font-family: Inter, sans-serif; background: var(--bg); color: var(--text); }
-    
-    /* Header Style (Sama seperti sebelumnya) */
-    header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: linear-gradient(90deg, var(--primary), #0a5aa6); color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    header .logo { display: flex; align-items: center; gap: 12px; }
-    header img.logo-sekolah { width: 45px; height: 45px; background: #fff; padding: 2px; border-radius: 8px; }
-    header h1 { font-size: 18px; margin: 0; }
-    header p { font-size: 12px; margin: 0; opacity: 0.9; }
-    nav ul { list-style: none; display: flex; gap: 15px; margin: 0; padding: 0; }
-    nav a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; opacity: 0.8; transition: 0.3s; }
-    nav a.active, nav a:hover { opacity: 1; border-bottom: 2px solid var(--accent); }
-
-    /* --- BAGIAN MENU PILIHAN KELAS (Mirip Jurusan) --- */
-    .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
-    .section-header { text-align: center; margin-bottom: 40px; }
-    .section-header h2 { color: var(--primary); margin-bottom: 10px; }
-    
-    .jurusan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .jurusan-card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border-bottom: 4px solid var(--accent); }
-    .jurusan-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-    .jurusan-card h3 { color: var(--primary); margin: 0 0 5px; font-size: 24px; }
-    .jurusan-card p { color: #666; margin-bottom: 20px; font-size: 14px; }
-    
-    .btn-action { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; cursor: pointer; border: none; font-size: 14px; margin: 5px; transition: 0.2s; }
-    .btn-action:hover { background: #004499; }
-    .btn-sub { background: #eef4fa; color: var(--primary); border: 1px solid #dcebf7; }
-    .btn-sub:hover { background: var(--primary); color: white; }
-
-    /* --- BAGIAN TAMPILAN GALERI (Hidden Default) --- */
-    #gallery-view { display: none; animation: fadeIn 0.5s; }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-
-    .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-    .btn-back { background: #ddd; color: #333; padding: 8px 16px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold; }
-    .btn-back:hover { background: #ccc; }
-
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-    .gallery-item { position: relative; overflow: hidden; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; height: 200px; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-    .gallery-item:hover img { transform: scale(1.1); }
-    
-    /* Overlay Keterangan (Opsional) */
-    .overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; padding: 8px; font-size: 12px; transform: translateY(100%); transition: 0.3s; text-align: center; }
-    .gallery-item:hover .overlay { transform: translateY(0); }
-
-    /* Pesan Kosong */
-    .empty-msg { text-align: center; padding: 50px; color: #888; grid-column: 1 / -1; }
-
-    /* --- LIGHTBOX (Modal Foto Besar) --- */
-    .lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-    .lightbox img { max-width: 90%; max-height: 85vh; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-    .lightbox-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; font-weight: bold; }
-    .lightbox-caption { position: absolute; bottom: 20px; color: white; width: 100%; text-align: center; }
-
-    /* Responsif */
-    @media (max-width: 600px) {
-        .header h1 { font-size: 16px; }
-        .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
 </head>
 <body>
 
@@ -183,92 +114,9 @@
     <p style="text-align: center; padding: 20px; color: #666; font-size: 14px;">&copy; 2025 SMEKTA | Galeri Angkatan</p>
   </footer>
 
-  <script>
-    // --- DATABASE FOTO ---
-    // Ganti URL gambar di bawah ini dengan lokasi file foto asli Anda.
-    // Format: "folder/nama-foto.jpg"
-    const galleries = {
-      'rpl': [
-        { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Momen foto menggunakan baju praktik bersama Bu Yuli Rohmawati' },
-        { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Foto bersama Drama Roro Jonggrang' },
-      ],
-      'dpb': [],
-      'titl': [], // Kosongkan jika belum ada foto
-      'tpm1': [],
-      'tpm2': [],
-      'tkj1': [],
-      'tkj2': [],
-      'tkr1': [],
-      'tkr2': [],
-      'tkr3': [],
-      'tpk1': [],
-      'tpk2': []
-    };
-
-    // --- LOGIKA JAVASCRIPT ---
-    const menuView = document.getElementById('menu-view');
-    const galleryView = document.getElementById('gallery-view');
-    const photoContainer = document.getElementById('photo-container');
-    const classTitle = document.getElementById('class-title');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCap = document.getElementById('lightbox-caption');
-
-    // Fungsi Membuka Galeri
-    function openGallery(classId) {
-      // 1. Sembunyikan menu, tampilkan galeri
-      menuView.style.display = 'none';
-      galleryView.style.display = 'block';
-      window.scrollTo(0, 0); // Scroll ke atas
-
-      // 2. Set Judul
-      classTitle.innerText = "Galeri Kelas XI " + classId.toUpperCase();
-
-      // 3. Bersihkan foto lama
-      photoContainer.innerHTML = '';
-
-      // 4. Ambil data foto
-      const photos = galleries[classId];
-
-      if (photos && photos.length > 0) {
-        // Jika ada foto, buat elemen HTML nya
-        photos.forEach(photo => {
-          const item = document.createElement('div');
-          item.className = 'gallery-item';
-          item.innerHTML = `
-            <img src="${photo.src}" alt="${photo.desc}" loading="lazy" onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
-            <div class="overlay">${photo.desc}</div>
-          `;
-          // Tambahkan event klik untuk lightbox
-          item.onclick = () => openLightbox(photo.src, photo.desc);
-          photoContainer.appendChild(item);
-        });
-      } else {
-        // Jika tidak ada foto
-        photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto yang diunggah untuk kelas ini.</div>';
-      }
-    }
-
-    // Fungsi Kembali ke Menu
-    function closeGallery() {
-      galleryView.style.display = 'none';
-      menuView.style.display = 'block';
-    }
-
-    // Fungsi Lightbox
-    function openLightbox(src, caption) {
-      lightboxImg.src = src;
-      lightboxCap.innerText = caption;
-      lightbox.style.display = 'flex';
-    }
-
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-    }
-  </script>
-
 </body>
 </html>
+
 
 
 
