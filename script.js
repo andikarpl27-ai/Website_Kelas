@@ -113,116 +113,135 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+/* =========================================
+   SCRIPT.JS - FINAL UNIVERSAL
+   (Aman untuk Index, Jurusan, & Galeri)
+   ========================================= */
 
-
-// =========================================
-// 1. DATABASE FOTO GALERI
-// =========================================
-const galleries = {
-  'rpl': [
-    { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Momen foto menggunakan baju praktik bersama Bu Yuli Rohmawati' },
-    { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Foto bersama Drama Roro Jonggrang' },
-  ],
-  'dpb': [],
-  'titl': [], 
-  'tpm1': [],
-  'tpm2': [],
-  'tkj1': [],
-  'tkj2': [],
-  'tkr1': [],
-  'tkr2': [],
-  'tkr3': [],
-  'tpk1': [],
-  'tpk2': []
-};
-
-// =========================================
-// 2. LOGIKA UTAMA DIBUNGKUS DALAM DOMContentLoaded
-// =========================================
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- BAGIAN 1: LOGIKA SLIDER (Hanya jalan jika ada slider) ---
+    const sliderContainer = document.querySelector('.slider');
+    
+    if (sliderContainer) {
+        let slideIndex = 1;
+        showSlides(slideIndex);
 
-  // 2.1. DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
-  const menuView = document.getElementById('menu-view');
-  const galleryView = document.getElementById('gallery-view');
-  const photoContainer = document.getElementById('photo-container');
-  const classTitle = document.getElementById('class-title');
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCap = document.getElementById('lightbox-caption');
+        // Fungsi Next/Prev
+        window.plusSlides = function(n) {
+            showSlides(slideIndex += n);
+        };
 
-  // Pastikan elemen ditemukan. Jika tidak, hentikan eksekusi skrip untuk menghindari error.
-  if (!menuView || !galleryView || !photoContainer) {
-    console.error("Kesalahan: Elemen DOM (menu-view, gallery-view, atau photo-container) tidak ditemukan.");
-    return; // Hentikan fungsi jika elemen penting hilang
-  }
+        // Fungsi Utama Slider
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            if (!slides || slides.length === 0) return; // Stop jika tidak ada slide
 
-  // 2.2. LOGIKA GALERI
-  
-  /**
-   * Membuka tampilan galeri spesifik berdasarkan ID kelas.
-   * @param {string} classId - ID kelas (e.g., 'rpl', 'tpm1').
-   */
-  window.openGallery = function (classId) {
-    // 1. Sembunyikan menu, tampilkan galeri
-    menuView.style.display = 'none';
-    galleryView.style.display = 'block';
-    window.scrollTo(0, 0); 
-
-    // 2. Set Judul
-    const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
-    classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
-
-    // 3. Bersihkan foto lama
-    photoContainer.innerHTML = '';
-
-    // 4. Ambil data foto
-    const photos = galleries[classId];
-
-    if (photos && photos.length > 0) {
-      // Jika ada foto, buat elemen HTML nya
-      photos.forEach(photo => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `
-          <img src="${photo.src}" alt="${photo.desc}" loading="lazy" 
-               onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
-          <div class="overlay">${photo.desc}</div>
-        `;
-        // Tambahkan event klik untuk lightbox
-        item.onclick = () => openLightbox(photo.src, photo.desc);
-        photoContainer.appendChild(item);
-      });
-    } else {
-      // Jika tidak ada foto
-      photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto yang diunggah untuk kelas ini.</div>';
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+        
+        // Auto slide (Opsional, hapus jika tidak mau)
+        setInterval(() => {
+            window.plusSlides(1);
+        }, 5000); 
     }
-  };
 
-  /**
-   * Fungsi Kembali ke Menu Utama Galeri.
-   */
-  window.closeGallery = function () {
-    galleryView.style.display = 'none';
-    menuView.style.display = 'block';
-  };
 
-  // 2.3. LOGIKA LIGHTBOX (FOTO BESAR)
-  
-  /**
-   * Membuka modal foto besar (lightbox).
-   * @param {string} src - Sumber (URL) gambar.
-   * @param {string} caption - Keterangan gambar.
-   */
-  function openLightbox(src, caption) {
-    lightboxImg.src = src;
-    lightboxCap.innerText = caption;
-    lightbox.style.display = 'flex';
-  }
+    // --- BAGIAN 2: LOGIKA GALERI (Hanya jalan jika ada elemen galeri) ---
+    
+    // Database Foto
+    const galleries = {
+        'rpl': [
+            { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Foto Baju Praktik' },
+            { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Drama Roro Jonggrang' }
+        ],
+        'dpb': [],
+        'titl': [],
+        'tpm1': [], 'tpm2': [],
+        'tkj1': [], 'tkj2': [],
+        'tkr1': [], 'tkr2': [], 'tkr3': [],
+        'tpk1': [], 'tpk2': []
+    };
 
-  /**
-   * Menutup modal foto besar.
-   */
-  window.closeLightbox = function () {
-    lightbox.style.display = 'none';
-  };
+    // Ambil elemen galeri
+    const menuView = document.getElementById('menu-view');
+    const galleryView = document.getElementById('gallery-view');
+    const photoContainer = document.getElementById('photo-container');
+    const classTitle = document.getElementById('class-title');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCap = document.getElementById('lightbox-caption');
+
+    // FUNGSI GLOBAL (Agar bisa dipanggil onclick di HTML)
+    // Kita definisikan window.openGallery di sini agar aman
+    
+    window.openGallery = function(classId) {
+        // Cek dulu apakah elemen galeri ada di halaman ini
+        if (!menuView || !galleryView) {
+            console.warn("Fitur galeri tidak aktif di halaman ini.");
+            return;
+        }
+
+        // 1. Tampilan
+        menuView.style.display = 'none';
+        galleryView.style.display = 'block';
+        window.scrollTo(0, 0);
+
+        // 2. Judul
+        if (classTitle) {
+            const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
+            classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
+        }
+
+        // 3. Render Foto
+        if (photoContainer) {
+            photoContainer.innerHTML = '';
+            const photos = galleries[classId] || [];
+
+            if (photos.length > 0) {
+                photos.forEach(photo => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <img src="${photo.src}" alt="${photo.desc}" loading="lazy" 
+                             onerror="this.src='https://via.placeholder.com/400?text=Foto+Tidak+Ditemukan'">
+                        <div class="overlay">${photo.desc}</div>
+                    `;
+                    item.onclick = () => window.openLightbox(photo.src, photo.desc);
+                    photoContainer.appendChild(item);
+                });
+            } else {
+                photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto.</div>';
+            }
+        }
+    };
+
+    window.closeGallery = function() {
+        if (galleryView && menuView) {
+            galleryView.style.display = 'none';
+            menuView.style.display = 'block';
+        }
+    };
+
+    window.openLightbox = function(src, caption) {
+        if (lightbox && lightboxImg) {
+            lightboxImg.src = src;
+            if (lightboxCap) lightboxCap.innerText = caption;
+            lightbox.style.display = 'flex';
+        }
+    };
+
+    window.closeLightbox = function() {
+        if (lightbox) {
+            lightbox.style.display = 'none';
+        }
+    };
+
 });
