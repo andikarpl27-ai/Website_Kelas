@@ -115,43 +115,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-// ==================== GALERI INTERAKTIF ====================
-const uploadInput = document.getElementById("uploadInput");
-const galeriGrid = document.getElementById("galeriGrid");
-
-// Menyimpan foto di localStorage (tetap ada saat reload)
-function loadSavedImages() {
-  const saved = JSON.parse(localStorage.getItem("galeriFotos")) || [];
-  galeriGrid.innerHTML = "";
-  saved.forEach(src => {
-    const div = document.createElement("div");
-    div.classList.add("foto");
-    div.innerHTML = `<img src="${src}" alt="Foto Kenangan"><p>Foto dari teman ✨</p>`;
-    galeriGrid.appendChild(div);
-  });
-}
-loadSavedImages();
-
-uploadInput.addEventListener("change", (e) => {
-  const files = e.target.files;
-  let saved = JSON.parse(localStorage.getItem("galeriFotos")) || [];
-
-  for (let file of files) {
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      saved.push(evt.target.result);
-      localStorage.setItem("galeriFotos", JSON.stringify(saved));
-      loadSavedImages();
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
 // =========================================
-// 1. DATABASE FOTO GALERI
+//  DATABASE FOTO GALERI
 // =========================================
-// Ganti URL gambar di bawah ini dengan lokasi file foto asli Anda.
-// Format: "folder/nama-foto.jpg"
 const galleries = {
   // Data dari galeri.html sebelumnya:
   'rpl': [
@@ -172,8 +138,9 @@ const galleries = {
 };
 
 // =========================================
-// 2. DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
+//  DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
 // =========================================
+// Pastikan ID ini sesuai dengan galeri.html:
 const menuView = document.getElementById('menu-view');
 const galleryView = document.getElementById('gallery-view');
 const photoContainer = document.getElementById('photo-container');
@@ -184,7 +151,7 @@ const lightboxCap = document.getElementById('lightbox-caption');
 
 
 // =========================================
-// 3. LOGIKA GALERI
+//  LOGIKA GALERI UTAMA
 // =========================================
 
 /**
@@ -198,7 +165,6 @@ function openGallery(classId) {
   window.scrollTo(0, 0); 
 
   // 2. Set Judul
-  // Mengubah TPK1 menjadi TPK 1 (penyesuaian visual)
   const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
   classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
 
@@ -237,14 +203,9 @@ function closeGallery() {
 }
 
 // =========================================
-// 4. LOGIKA LIGHTBOX (FOTO BESAR)
+//  LOGIKA LIGHTBOX (FOTO BESAR)
 // =========================================
 
-/**
- * Membuka modal foto besar (lightbox).
- * @param {string} src - Sumber (URL) gambar.
- * @param {string} caption - Keterangan gambar.
- */
 function openLightbox(src, caption) {
   lightboxImg.src = src;
   lightboxCap.innerText = caption;
@@ -258,7 +219,7 @@ function closeLightbox() {
   lightbox.style.display = 'none';
 }
 
+
 window.openGallery = openGallery;
 window.closeGallery = closeGallery;
 window.closeLightbox = closeLightbox;
-// ==================== AKHIR GALERI INTERAKTIF ====================
