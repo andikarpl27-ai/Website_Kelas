@@ -116,10 +116,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // =========================================
-//  DATABASE FOTO GALERI
+// 1. DATABASE FOTO GALERI
 // =========================================
 const galleries = {
-  // Data dari galeri.html sebelumnya:
   'rpl': [
     { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Momen foto menggunakan baju praktik bersama Bu Yuli Rohmawati' },
     { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Foto bersama Drama Roro Jonggrang' },
@@ -138,88 +137,92 @@ const galleries = {
 };
 
 // =========================================
-//  DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
+// 2. LOGIKA UTAMA DIBUNGKUS DALAM DOMContentLoaded
 // =========================================
-// Pastikan ID ini sesuai dengan galeri.html:
-const menuView = document.getElementById('menu-view');
-const galleryView = document.getElementById('gallery-view');
-const photoContainer = document.getElementById('photo-container');
-const classTitle = document.getElementById('class-title');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lightboxCap = document.getElementById('lightbox-caption');
+document.addEventListener('DOMContentLoaded', () => {
 
+  // 2.1. DOM ELEMENTS (ELEMEN HTML YANG DIPERLUKAN)
+  const menuView = document.getElementById('menu-view');
+  const galleryView = document.getElementById('gallery-view');
+  const photoContainer = document.getElementById('photo-container');
+  const classTitle = document.getElementById('class-title');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCap = document.getElementById('lightbox-caption');
 
-// =========================================
-//  LOGIKA GALERI UTAMA
-// =========================================
-
-/**
- * Membuka tampilan galeri spesifik berdasarkan ID kelas.
- * @param {string} classId - ID kelas (e.g., 'rpl', 'tpm1').
- */
-function openGallery(classId) {
-  // 1. Sembunyikan menu, tampilkan galeri
-  menuView.style.display = 'none';
-  galleryView.style.display = 'block';
-  window.scrollTo(0, 0); 
-
-  // 2. Set Judul
-  const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
-  classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
-
-  // 3. Bersihkan foto lama
-  photoContainer.innerHTML = '';
-
-  // 4. Ambil data foto
-  const photos = galleries[classId];
-
-  if (photos && photos.length > 0) {
-    // Jika ada foto, buat elemen HTML nya
-    photos.forEach(photo => {
-      const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = `
-        <img src="${photo.src}" alt="${photo.desc}" loading="lazy" 
-             onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
-        <div class="overlay">${photo.desc}</div>
-      `;
-      // Tambahkan event klik untuk lightbox
-      item.onclick = () => openLightbox(photo.src, photo.desc);
-      photoContainer.appendChild(item);
-    });
-  } else {
-    // Jika tidak ada foto
-    photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto yang diunggah untuk kelas ini.</div>';
+  // Pastikan elemen ditemukan. Jika tidak, hentikan eksekusi skrip untuk menghindari error.
+  if (!menuView || !galleryView || !photoContainer) {
+    console.error("Kesalahan: Elemen DOM (menu-view, gallery-view, atau photo-container) tidak ditemukan.");
+    return; // Hentikan fungsi jika elemen penting hilang
   }
-}
 
-/**
- * Fungsi Kembali ke Menu Utama Galeri.
- */
-function closeGallery() {
-  galleryView.style.display = 'none';
-  menuView.style.display = 'block';
-}
+  // 2.2. LOGIKA GALERI
+  
+  /**
+   * Membuka tampilan galeri spesifik berdasarkan ID kelas.
+   * @param {string} classId - ID kelas (e.g., 'rpl', 'tpm1').
+   */
+  window.openGallery = function (classId) {
+    // 1. Sembunyikan menu, tampilkan galeri
+    menuView.style.display = 'none';
+    galleryView.style.display = 'block';
+    window.scrollTo(0, 0); 
 
-// =========================================
-//  LOGIKA LIGHTBOX (FOTO BESAR)
-// =========================================
+    // 2. Set Judul
+    const formattedClass = classId.toUpperCase().replace(/(\d)/, ' $1');
+    classTitle.innerText = `Galeri Kelas XI ${formattedClass}`;
 
-function openLightbox(src, caption) {
-  lightboxImg.src = src;
-  lightboxCap.innerText = caption;
-  lightbox.style.display = 'flex';
-}
+    // 3. Bersihkan foto lama
+    photoContainer.innerHTML = '';
 
-/**
- * Menutup modal foto besar.
- */
-function closeLightbox() {
-  lightbox.style.display = 'none';
-}
+    // 4. Ambil data foto
+    const photos = galleries[classId];
 
+    if (photos && photos.length > 0) {
+      // Jika ada foto, buat elemen HTML nya
+      photos.forEach(photo => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
+          <img src="${photo.src}" alt="${photo.desc}" loading="lazy" 
+               onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
+          <div class="overlay">${photo.desc}</div>
+        `;
+        // Tambahkan event klik untuk lightbox
+        item.onclick = () => openLightbox(photo.src, photo.desc);
+        photoContainer.appendChild(item);
+      });
+    } else {
+      // Jika tidak ada foto
+      photoContainer.innerHTML = '<div class="empty-msg">Belum ada foto yang diunggah untuk kelas ini.</div>';
+    }
+  };
 
-window.openGallery = openGallery;
-window.closeGallery = closeGallery;
-window.closeLightbox = closeLightbox;
+  /**
+   * Fungsi Kembali ke Menu Utama Galeri.
+   */
+  window.closeGallery = function () {
+    galleryView.style.display = 'none';
+    menuView.style.display = 'block';
+  };
+
+  // 2.3. LOGIKA LIGHTBOX (FOTO BESAR)
+  
+  /**
+   * Membuka modal foto besar (lightbox).
+   * @param {string} src - Sumber (URL) gambar.
+   * @param {string} caption - Keterangan gambar.
+   */
+  function openLightbox(src, caption) {
+    lightboxImg.src = src;
+    lightboxCap.innerText = caption;
+    lightbox.style.display = 'flex';
+  }
+
+  /**
+   * Menutup modal foto besar.
+   */
+  window.closeLightbox = function () {
+    lightbox.style.display = 'none';
+  };
+});
