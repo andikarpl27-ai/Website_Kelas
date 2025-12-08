@@ -528,7 +528,7 @@ const allStudents = [
     { no: 6, name: "Charissa Martha Dewi", nisn: "0094423901", gender: "Perempuan", foto: "../All Images/img-rpl/caca.jpeg" },
     { no: 7, name: "Dinda Nur Lania Dewi", nisn: "0099412869", gender: "Perempuan", foto: "../All Images/img-rpl/dinda.jpeg" },
     { no: 8, name: "Dwi Astuti", nisn: "0092149701", gender: "Perempuan", foto: "../All Images/img-rpl/astuti.jpeg" },
-    { no: 9, name: "Elviana Jovita Andini", nisn: "0099297582", gender: "Perempuan", foto: "../All Images/img-rpl/dini.jpeg" },
+    { no: 9, name: "Elviana Jovita Andini", nisn: "0099297582", gender: "Perempuan", foto: "../All Images/img-rpl/dini.jpeg", status: "Tidak Aktif(Keluar)" },
     { no: 10, name: "Erdiva Berliana Putri", nisn: "0081366086", gender: "Perempuan", foto: "../All Images/img-rpl/diva.jpeg" },
     { no: 11, name: "Keany Agatha Nadzif", nisn: "0095314228", gender: "Laki-laki", foto: "../All Images/img-rpl/aga.jpeg" },
     { no: 12, name: "Khoirun Nisya", nisn: "0087715787", gender: "Perempuan", foto: "../All Images/img-rpl/nisya.jpeg" },
@@ -562,6 +562,9 @@ const studentGrid = document.getElementById('studentGrid');
 allStudents.forEach(s => {
     // Fallback Image jika kosong
     let imgSrc = s.foto ? s.foto : `https://ui-avatars.com/api/?name=${encodeURI(s.name)}&background=random`;
+  
+   // LOGIKA BARU: Cek status, jika kosong default-nya 'Aktif'
+    let statusSiswa = s.status ? s.status : 'Aktif'; 
     
     // Create Element
     let div = document.createElement('div');
@@ -577,7 +580,7 @@ allStudents.forEach(s => {
             <div style="font-size:12px; color:#666; margin-bottom:8px;">
                 Jenis Kelamin: <b>${s.gender}</b>
             </div>
-            <button class="btn-detail" onclick="showStudent('${s.name}', '${s.nisn}', '${s.gender}', '${imgSrc}')">Lihat Detail</button>
+            <button class="btn-detail" onclick="showStudent('${s.name}', '${s.nisn}', '${s.gender}', '${imgSrc}', '${statusSiswa}')">Lihat Detail</button>
         </div>
     `;
     studentGrid.appendChild(div);
@@ -604,15 +607,18 @@ function showGuru(nama, mapel, foto) {
 }
 
 // Fungsi Lihat Detail Siswa
-function showStudent(nama, nisn, jk, foto) {
+function showStudent(nama, nisn, jk, foto, status) {
     pImg.src = foto;
     pTitle.innerText = nama;
     pSub.innerText = "Siswa XI RPL";
+  
+    // Tentukan Warna: Jika "Aktif" hijau, selain itu (Keluar/Pindah) merah
+    let warnaStatus = (status === 'Aktif') ? 'green' : 'red';
     
     pInfo.innerHTML = `
         <p><b>NISN:</b> ${nisn}</p>
         <p><b>Jenis Kelamin:</b> ${jk}</p> 
-        <p><b>Status:</b> <span style="color:green; font-weight:bold;">Aktif</span></p>
+        <p><b>Status:</b> <span style="color:${warnaStatus}; font-weight:bold;">${status}</span></p>
     `;
     
     modal.style.display = 'flex';
@@ -621,6 +627,7 @@ function showStudent(nama, nisn, jk, foto) {
 
 </body>
 </html>
+
 
 
 
