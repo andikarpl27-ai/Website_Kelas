@@ -106,8 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Database Foto Galeri
     const galleries = {
         'rpl': [
-            { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Foto Baju Praktik' },
-            { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Drama Roro Jonggrang' }
+            { src: 'All Images/img-rpl/baju praktek.jpeg', desc: 'Momen foto bersama menggunakan baju praktik' },
+            { src: 'All Images/img-rpl/drama rorojonggrang.jpeg', desc: 'Foto bersama acara konsep Profil Lulusan 8 Dimensi dengan pentas Drama Kolosal Roro Jonggarng' },
+           { src: 'All Images/img-rpl/Hari Batik.jpeg', desc: 'Momen foto bersama WalKel Bu Yuni Acara Hari Batik Nasional' }
         ],
         'dpb': [],
         'titl': [],
@@ -183,3 +184,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 });
+
