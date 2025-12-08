@@ -608,17 +608,20 @@ function showStudent(nama, nisn, jk, foto) {
     pImg.src = foto;
     pTitle.innerText = nama;
     pSub.innerText = "Siswa XI RPL";
+    
     pInfo.innerHTML = `
         <p><b>NISN:</b> ${nisn}</p>
-        <p><b>Jenis Kelamin:</b> ${jk === 'L' ? 'Laki-laki' : 'Perempuan'}</p>
+        <p><b>Jenis Kelamin:</b> ${jk}</p> 
         <p><b>Status:</b> <span style="color:green; font-weight:bold;">Aktif</span></p>
     `;
+    
     modal.style.display = 'flex';
 }
 </script>
 
 </body>
 </html>
+
 
 
 
